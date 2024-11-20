@@ -33,6 +33,65 @@ CREATE TABLE Postagem (
 );
 
 CREATE TABLE Comentário (
+    Id_comentário primary key auto_Incremente not null int,
+    conteudo text,
+    data_hora time,
+    id_comentario_pai foreign key int,
+    id_usuario foreign key int,
+    Id_postagem foreign key int
+    );
+
+CREATE TABLE Interação (
+    ID_interação primary key int,
+    tipo_interação,
+    data_hora date,
+    Id_comentátio foreign key int,
+    Id_Postagem foreign key int,
+    Id_Usuario foreign key int
+    );
+
+CREATE TABLE Notificacao (
+    ID_Mensagem primary key int,
+    Conteudo text,
+    Data_hora time,
+    ID_Grupo foreign key int,
+    Id_Usuario foreign key int
+    );
+
+CREATE TABLE Grupo (
+    Id_Grupo primary key int,
+    Nome_Grupo VARCHAR (30),
+    Descricao text,
+    Data_Criacao date
+    );
+
+CREATE TABLE Membro_Grupo (
+    ID_Grupo foreign key int,
+    Id_Usuario foreign key int
+    Funcao VARCHAR (15) 
+    );
+CREATE TABLE Conexao (
+    ID_Usuario_Origem foreign key int,
+    ID_Usuario_Destino foreign key int
+    );
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
    
    
