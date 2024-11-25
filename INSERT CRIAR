@@ -1,7 +1,7 @@
 -- Inserindo dados na tabela Usuarios
 INSERT INTO Usuarios (Nome_Usuario, Email, Data_Nascimento, Foto_Perfil)
 VALUES 
-('João Silva', 'joao.silva@email.com', '1990-05-15', NULL),
+('João Silva', 'joao.silva@email.com', '1990-05-15', https://github.com/Breno-G/AT2-N2-LBD/blob/main/midia/51796415803_00c721e0cc_k.jpg),
 ('Maria Oliveira', 'maria.oliveira@email.com', '1985-09-20', NULL),
 ('Carlos Souza', 'carlos.souza@email.com', '1992-12-10', NULL),
 ('Fernanda Pereira', 'fernanda.pereira@email.com', '1998-03-30', NULL),
