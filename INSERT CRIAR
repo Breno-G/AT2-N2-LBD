@@ -1,0 +1,181 @@
+-- Inserindo dados na tabela Usuarios
+INSERT INTO Usuarios (Nome_Usuario, Email, Data_Nascimento, Foto_Perfil)
+VALUES 
+('João Silva', 'joao.silva@email.com', '1990-05-15', NULL),
+('Maria Oliveira', 'maria.oliveira@email.com', '1985-09-20', NULL),
+('Carlos Souza', 'carlos.souza@email.com', '1992-12-10', NULL),
+('Fernanda Pereira', 'fernanda.pereira@email.com', '1998-03-30', NULL),
+('Lucas Martins', 'lucas.martins@email.com', '1993-07-22', NULL),
+('Ana Costa', 'ana.costa@email.com', '1987-11-05', NULL),
+('Rafael Lima', 'rafael.lima@email.com', '1995-02-17', NULL),
+('Juliana Mendes', 'juliana.mendes@email.com', '1990-04-25', NULL),
+('Eduardo Santos', 'eduardo.santos@email.com', '1996-01-10', NULL),
+('Patricia Rodrigues', 'patricia.rodrigues@email.com', '1989-06-30', NULL);
+
+-- Inserindo dados na tabela Grupos
+INSERT INTO Grupos (Nome_Grupo, Descricao, ID_Criador)
+VALUES 
+('Grupo A', 'Grupo para discussões sobre tecnologia', 1),
+('Grupo B', 'Grupo de viagens e turismo', 2),
+('Grupo C', 'Grupo de culinária', 3),
+('Grupo D', 'Grupo de esportes e atividades físicas', 4),
+('Grupo E', 'Grupo de filmes e séries', 5),
+('Grupo F', 'Grupo de leitura e literatura', 6),
+('Grupo G', 'Grupo de música e bandas', 7),
+('Grupo H', 'Grupo de jogos online', 8),
+('Grupo I', 'Grupo de arte e design', 9),
+('Grupo J', 'Grupo de fotografia', 10);
+
+-- Inserindo dados na tabela Postagem
+INSERT INTO Postagem (ID_Autor, Conteudo, Tipo_Midia)
+VALUES 
+(1, 'Novo artigo sobre IA!', 'texto'),
+(2, 'Dicas de viagem para o Brasil', 'texto'),
+(3, 'Receita de bolo de chocolate!', 'texto'),
+(4, 'Treino para fortalecer as pernas', 'video'),
+(5, 'Resenha do filme O Poderoso Chefão', 'texto'),
+(6, 'Começando um novo livro!', 'texto'),
+(7, 'Amo essa banda!', 'texto'),
+(8, 'Jogando no servidor X', 'video'),
+(9, 'Curso de design gráfico recomendado!', 'link'),
+(10, 'Fotos da minha viagem para Paris', 'imagem');
+
+-- Inserindo dados na tabela Sessao
+INSERT INTO Sessao (ID_Usuario, Token, Data_Expiracao)
+VALUES 
+(1, 'token_123456', '2024-12-31'),
+(2, 'token_654321', '2024-12-31'),
+(3, 'token_abcdef', '2024-12-31'),
+(4, 'token_ghijkl', '2024-12-31'),
+(5, 'token_mnopqr', '2024-12-31'),
+(6, 'token_stuvwx', '2024-12-31'),
+(7, 'token_yz1234', '2024-12-31'),
+(8, 'token_567890', '2024-12-31'),
+(9, 'token_abcdefg', '2024-12-31'),
+(10, 'token_123abcd', '2024-12-31');
+
+-- Inserindo dados na tabela Conexoes
+INSERT INTO Conexoes (ID_Seguidor, ID_Seguido, Status)
+VALUES 
+(1, 2, 'ativo'),
+(2, 3, 'ativo'),
+(3, 4, 'ativo'),
+(4, 5, 'ativo'),
+(5, 6, 'ativo'),
+(6, 7, 'ativo'),
+(7, 8, 'ativo'),
+(8, 9, 'ativo'),
+(9, 10, 'ativo'),
+(10, 1, 'ativo');
+
+-- Inserindo dados na tabela Mensagens
+INSERT INTO Mensagens (ID_Remetente, ID_Destinatario, Conteudo)
+VALUES 
+(1, 2, 'Olá, como você está?'),
+(2, 3, 'Vamos marcar de viajar?'),
+(3, 4, 'A receita ficou ótima!'),
+(4, 5, 'Treino de amanhã?'),
+(5, 6, 'Gostei muito da sua resenha!'),
+(6, 7, 'O livro é excelente, vale muito a pena!'),
+(7, 8, 'Qual sua música favorita da banda?'),
+(8, 9, 'Vamos jogar juntos?'),
+(9, 10, 'Adorei o seu trabalho!'),
+(10, 1, 'Fotos incríveis!');
+
+-- Inserindo dados na tabela Notificacoes
+INSERT INTO Notificacoes (ID_Usuario, Tipo, Origem, Descricao)
+VALUES 
+(1, 'mensagem', 'João Silva', 'Você recebeu uma mensagem de João Silva'),
+(2, 'comentario', 'Carlos Souza', 'Carlos comentou na sua postagem'),
+(3, 'avaliacao', 'Lucas Martins', 'Lucas avaliou sua postagem'),
+(4, 'grupo', 'Grupo D', 'Você foi adicionado ao grupo de esportes'),
+(5, 'mensagem', 'Patricia Rodrigues', 'Você recebeu uma mensagem de Patricia Rodrigues'),
+(6, 'comentario', 'Rafael Lima', 'Rafael comentou na sua postagem'),
+(7, 'avaliacao', 'Eduardo Santos', 'Eduardo avaliou sua postagem'),
+(8, 'grupo', 'Grupo H', 'Você foi adicionado ao grupo de jogos online'),
+(9, 'mensagem', 'Juliana Mendes', 'Você recebeu uma mensagem de Juliana Mendes'),
+(10, 'comentario', 'Ana Costa', 'Ana comentou na sua postagem');
+
+-- Inserindo dados na tabela Comentarios
+INSERT INTO Comentarios (ID_Postagem, ID_Comentario_Pai, ID_Autor, Conteudo)
+VALUES 
+(1, NULL, 2, 'Excelente artigo!'),
+(2, NULL, 3, 'Quais dicas você tem para quem vai para o Rio?'),
+(3, NULL, 4, 'Adoro essa receita, vou tentar!'),
+(4, NULL, 5, 'Legal, vou tentar esse treino hoje!'),
+(5, NULL, 6, 'Ótima resenha, vou assistir o filme!'),
+(6, NULL, 7, 'Estou amando esse livro, comecei ontem!'),
+(7, NULL, 8, 'Qual a melhor música?'),
+(8, NULL, 9, 'Qual servidor você recomenda?'),
+(9, NULL, 10, 'Muito bom o curso, recomendo!'),
+(10, NULL, 1, 'Essa foto ficou maravilhosa!');
+
+-- Inserindo dados na tabela Avaliacoes
+INSERT INTO Avaliacoes (ID_Usuario, ID_Postagem, Tipo)
+VALUES 
+(1, 1, 'positivo'),
+(2, 2, 'positivo'),
+(3, 3, 'positivo'),
+(4, 4, 'positivo'),
+(5, 5, 'positivo'),
+(6, 6, 'positivo'),
+(7, 7, 'positivo'),
+(8, 8, 'positivo'),
+(9, 9, 'positivo'),
+(10, 10, 'positivo');
+
+-- Inserindo dados na tabela Tags
+INSERT INTO Tags (Nome)
+VALUES 
+('Tecnologia'),
+('Viagem'),
+('Culinária'),
+('Esportes'),
+('Cinema'),
+('Literatura'),
+('Música'),
+('Jogos'),
+('Arte'),
+('Fotografia');
+
+-- Inserindo dados na tabela Membros
+INSERT INTO Membros (ID_Usuario, ID_Grupo, Funcao)
+VALUES 
+(1, 1, 'administrador'),
+(2, 2, 'administrador'),
+(3, 3, 'administrador'),
+(4, 4, 'administrador'),
+(5, 5, 'administrador'),
+(6, 6, 'administrador'),
+(7, 7, 'administrador'),
+(8, 8, 'administrador'),
+(9, 9, 'administrador'),
+(10, 10, 'administrador');
+
+-- Inserindo dados na tabela Tag_Usuario
+INSERT INTO Tag_Usuario (ID_Usuario, ID_Tag)
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
+
+-- Inserindo dados na tabela Usuario_Mensagem
+INSERT INTO Usuario_Mensagem (ID_Usuario, ID_Mensagem)
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
