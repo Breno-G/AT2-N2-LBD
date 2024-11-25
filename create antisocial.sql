@@ -73,18 +73,6 @@ CREATE TABLE Notificacoes (
     FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario)
 );
 
-CREATE TABLE Avaliacoes (
-    ID_Avaliacao INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    ID_Postagem INT DEFAULT NULL,
-    ID_Comentario INT DEFAULT NULL,
-    Tipo ENUM('positivo', 'negativo') NOT NULL,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Postagem) REFERENCES Postagem(ID_Postagem),
-    FOREIGN KEY (ID_Comentario) REFERENCES Comentarios(ID_Comentario)
-);
-
 CREATE TABLE Comentarios (
     ID_Comentario INT AUTO_INCREMENT PRIMARY KEY,
     ID_Postagem INT DEFAULT NULL,
@@ -95,6 +83,18 @@ CREATE TABLE Comentarios (
     FOREIGN KEY (ID_Postagem) REFERENCES Postagem(ID_Postagem),
     FOREIGN KEY (ID_Comentario_Pai) REFERENCES Comentarios(ID_Comentario),
     FOREIGN KEY (ID_Autor) REFERENCES Usuarios(ID_Usuario)
+);
+
+CREATE TABLE Avaliacoes (
+    ID_Avaliacao INT AUTO_INCREMENT PRIMARY KEY,
+    ID_Usuario INT NOT NULL,
+    ID_Postagem INT DEFAULT NULL,
+    ID_Comentario INT DEFAULT NULL,
+    Tipo ENUM('positivo', 'negativo') NOT NULL,
+    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
+    FOREIGN KEY (ID_Postagem) REFERENCES Postagem(ID_Postagem),
+    FOREIGN KEY (ID_Comentario) REFERENCES Comentarios(ID_Comentario)
 );
 
 CREATE TABLE Tags (
