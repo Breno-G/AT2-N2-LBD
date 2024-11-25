@@ -179,3 +179,10 @@ VALUES
 (8, 8),
 (9, 9),
 (10, 10);
+
+-- Inserindo novos usuários
+INSERT INTO usuarios (ID_Usuario, Nome_Usuario, Email, Data_Nascimento, Foto_Perfil)
+VALUES (11, 'Bolso', 'mito@email.com','1955-03-21', "C:\Users\rogerio.ramos\Desktop\midia\51796415803_00c721e0cc_k.jpg");
+
+INSERT INTO usuarios (ID_Usuario, Nome_Usuario, Email, Data_Nascimento, Foto_Perfil)
+VALUES (12, 'Lule', 'picanha@email.com','1945-10-27', "C:\Users\rogerio.ramos\Desktop\midia\lule.jfif");
