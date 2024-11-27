@@ -1,134 +1,142 @@
+CREATE DATABASE IF NOT EXISTS rede_antissocial
+DEFAULT CHARACTER SET = 'utf8'
+DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE DATABASE RedeAntissocial;
+USE rede_antissocial;
 
-USE RedeAntissocial;
+-- Sessão 1: TABELAS PRINCIPAIS
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome_usuario VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    data_nascimento DATE NOT NULL,
+    foto_perfil VARCHAR(255),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Usuarios (
-    ID_Usuario INT AUTO_INCREMENT PRIMARY KEY,
-    Nome_Usuario VARCHAR(100) NOT NULL UNIQUE,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    Data_Nascimento DATE NOT NULL,
-    Foto_Perfil BLOB,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE perfis (
+    id_perfil INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    descricao VARCHAR(50),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Grupos (
-    ID_Grupo INT AUTO_INCREMENT PRIMARY KEY,
-    Nome_Grupo VARCHAR(100) NOT NULL UNIQUE,
-    Descricao TEXT,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ID_Criador INT NOT NULL,
-    FOREIGN KEY (ID_Criador) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE IF NOT EXISTS grupos (
+    id_grupo INT AUTO_INCREMENT PRIMARY KEY,
+    nome_grupo VARCHAR(100) NOT NULL UNIQUE,
+    descricao VARCHAR(255),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id_criador INT NOT NULL,
+    FOREIGN KEY (id_criador) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Postagem (
-    ID_Postagem INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Autor INT NOT NULL,
-    Conteudo TEXT NOT NULL,
-    Tipo_Midia ENUM('texto', 'imagem', 'video', 'link') DEFAULT 'texto',
-    Caminho_Midia VARCHAR(255),
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Autor) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE IF NOT EXISTS sessoes (
+    id_sessao INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    hora_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    hora_saida TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Sessao (
-    ID_Sessao INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    Token VARCHAR(255) NOT NULL,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Data_Expiracao TIMESTAMP,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE IF NOT EXISTS conexoes (
+    id_seguidor INT NOT NULL,
+    id_seguido INT NOT NULL,
+    data_conexao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_seguidor, id_seguido),
+    FOREIGN KEY (id_seguidor) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_seguido) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Conexoes (
-    ID_Conexao INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Seguidor INT NOT NULL,
-    ID_Seguido INT NOT NULL,
-    Data_Conexao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Status ENUM('ativo', 'bloqueado') DEFAULT 'ativo',
-    FOREIGN KEY (ID_Seguidor) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Seguido) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE conversas (
+    id_conversa INT AUTO_INCREMENT PRIMARY KEY,
+    id_remetente INT NOT NULL, 
+    id_destinatario INT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_remetente) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_destinatario) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Mensagens (
-    ID_Mensagem INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Remetente INT NOT NULL,
-    ID_Destinatario INT NOT NULL,
-    Conteudo TEXT NOT NULL,
-    Caminho_Midia VARCHAR(255),
-    Data_Envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Status ENUM('enviada', 'recebida', 'lida') DEFAULT 'enviada',
-    FOREIGN KEY (ID_Remetente) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Destinatario) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE mensagens (
+    id_mensagem INT AUTO_INCREMENT PRIMARY KEY,
+    id_conversa INT NOT NULL, 
+    id_remetente INT NOT NULL,
+    conteudo VARCHAR(1000) NOT NULL,
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status_mensagem ENUM('enviada', 'recebida', 'lida') DEFAULT 'enviada',
+    FOREIGN KEY (id_conversa) REFERENCES conversas(id_conversa),
+    FOREIGN KEY (id_remetente) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Notificacoes (
-    ID_Notificacao INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    Tipo ENUM('mensagem', 'comentario', 'avaliacao', 'grupo') NOT NULL,
-    Origem VARCHAR(255),
-    Descricao TEXT,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Status ENUM('lida', 'nao_lida') DEFAULT 'nao_lida',
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE IF NOT EXISTS postagens (
+    id_postagem INT AUTO_INCREMENT PRIMARY KEY,
+    id_autor INT NOT NULL,
+    tipo_destino ENUM('perfil', 'grupo') NOT NULL,
+    id_destino INT NOT NULL, 
+    conteudo TEXT NOT NULL, 
+    tipo_midia ENUM('texto', 'imagem', 'video') DEFAULT 'texto',
+    caminho_midia VARCHAR(255),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_autor) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Comentarios (
-    ID_Comentario INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Postagem INT DEFAULT NULL,
-    ID_Comentario_Pai INT DEFAULT NULL,
-    ID_Autor INT NOT NULL,
-    Conteudo TEXT NOT NULL,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Postagem) REFERENCES Postagem(ID_Postagem),
-    FOREIGN KEY (ID_Comentario_Pai) REFERENCES Comentarios(ID_Comentario),
-    FOREIGN KEY (ID_Autor) REFERENCES Usuarios(ID_Usuario)
-);
+CREATE TABLE IF NOT EXISTS comentarios (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_postagem INT DEFAULT NULL,
+    id_comentario_pai INT DEFAULT NULL,
+    id_autor INT NOT NULL,
+    conteudo TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_postagem) REFERENCES postagens(id_postagem),
+    FOREIGN KEY (id_comentario_pai) REFERENCES comentarios(id_comentario),
+    FOREIGN KEY (id_autor) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Avaliacoes (
-    ID_Avaliacao INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    ID_Postagem INT DEFAULT NULL,
-    ID_Comentario INT DEFAULT NULL,
-    Tipo ENUM('positivo', 'negativo') NOT NULL,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Postagem) REFERENCES Postagem(ID_Postagem),
-    FOREIGN KEY (ID_Comentario) REFERENCES Comentarios(ID_Comentario)
-);
+CREATE TABLE IF NOT EXISTS avaliacoes (
+    id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_postagem INT DEFAULT NULL,
+    id_comentario INT DEFAULT NULL,
+    tipo ENUM('gostei', 'não gostei') NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_postagem) REFERENCES postagens(id_postagem),
+    FOREIGN KEY (id_comentario) REFERENCES comentarios(id_comentario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
-CREATE TABLE Tags (
-    ID_Tag INT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(255) NOT NULL UNIQUE,
-    Data_Criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_notificado INT NOT NULL,
+    tipo ENUM('mensagem', 'comentario', 'avaliacao', 'grupo') NOT NULL,
+    descricao VARCHAR(100),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status_notificacao ENUM('lida', 'nao_lida') DEFAULT 'nao_lida',
+    FOREIGN KEY (id_notificado) REFERENCES usuarios(id_usuario)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
--- Tabela Membros (Entidade Associativa entre Usuarios e Grupos)
-CREATE TABLE Membros (
-    ID_Membro INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    ID_Grupo INT NOT NULL,
-    Funcao ENUM('membro', 'administrador') DEFAULT 'membro',
-    Data_Entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Grupo) REFERENCES Grupos(ID_Grupo)
-);
+CREATE TABLE IF NOT EXISTS tags (
+    id_tag INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL UNIQUE,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
 
--- Tabela Tag_Usuario (Entidade Associativa entre Usuarios e Tags)
-CREATE TABLE Tag_Usuario (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    ID_Tag INT NOT NULL,
-    Data_Associacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Tag) REFERENCES Tags(ID_Tag)
-);
+-- Sessão 2: ENTIDADES ASSOCIATIVAS
 
--- Tabela Usuario_Mensagem (Entidade Associativa entre Usuarios e Mensagens)
-CREATE TABLE Usuario_Mensagem (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ID_Usuario INT NOT NULL,
-    ID_Mensagem INT NOT NULL,
-    FOREIGN KEY (ID_Usuario) REFERENCES Usuarios(ID_Usuario),
-    FOREIGN KEY (ID_Mensagem) REFERENCES Mensagens(ID_Mensagem)
-);
+CREATE TABLE IF NOT EXISTS tag_usuario (
+    id_usuario INT NOT NULL,
+    id_tag INT NOT NULL,
+    data_associacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_usuario, id_tag),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_tag) REFERENCES tags(id_tag)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
+
+CREATE TABLE membros (
+    id_membro INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_grupo INT NOT NULL,
+    funcao ENUM('membro', 'administrador') DEFAULT 'membro',
+    data_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_grupo) REFERENCES grupos(id_grupo)
+)DEFAULT CHARSET = 'utf8' DEFAULT COLLATE = 'utf8_general_ci';
