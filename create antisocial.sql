@@ -14,7 +14,7 @@
         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )DEFAULT CHARSET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_general_ci';
 
-    CREATE TABLE perfis (
+    CREATE TABLE IF NOT EXISTS perfis (
         id_perfil INT AUTO_INCREMENT PRIMARY KEY,
         id_usuario INT NOT NULL,
         descricao VARCHAR(255),
@@ -48,7 +48,7 @@
         FOREIGN KEY (id_seguido) REFERENCES usuarios(id_usuario)
     )DEFAULT CHARSET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_general_ci';
 
-    CREATE TABLE conversas (
+    CREATE TABLE IF NOT EXISTS conversas (
         id_conversa INT AUTO_INCREMENT PRIMARY KEY,
         id_remetente INT NOT NULL, 
         id_destinatario INT NOT NULL,
@@ -57,7 +57,7 @@
         FOREIGN KEY (id_destinatario) REFERENCES usuarios(id_usuario)
     )DEFAULT CHARSET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_general_ci';
 
-    CREATE TABLE mensagens (
+    CREATE TABLE IF NOT EXISTS mensagens (
         id_mensagem INT AUTO_INCREMENT PRIMARY KEY,
         id_conversa INT NOT NULL, 
         id_remetente INT NOT NULL,
@@ -85,7 +85,7 @@
         id_postagem INT DEFAULT NULL,
         id_comentario_pai INT DEFAULT NULL,
         id_autor INT NOT NULL,
-        conteudo TEXT NOT NULL,
+        conteudo VARCHAR(1000) NOT NULL,
         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (id_postagem) REFERENCES postagens(id_postagem),
         FOREIGN KEY (id_comentario_pai) REFERENCES comentarios(id_comentario),
@@ -118,8 +118,8 @@
         id_tag INT AUTO_INCREMENT PRIMARY KEY,
         id_criador INT NOT NULL,
         nome VARCHAR(255) NOT NULL UNIQUE,
-        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        FOREIGN KEY (id_autor) REFERENCES usuarios(id_usuario)
+        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_criador) REFERENCES usuarios(id_usuario)
     )DEFAULT CHARSET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_general_ci';
 
     -- Sessão 2: ENTIDADES ASSOCIATIVAS
@@ -133,7 +133,7 @@
         FOREIGN KEY (id_tag) REFERENCES tags(id_tag)
     )DEFAULT CHARSET = 'utf8mb4' DEFAULT COLLATE = 'utf8mb4_general_ci';
 
-    CREATE TABLE membros (
+    CREATE TABLE IF NOT EXISTS membros (
         id_membro INT AUTO_INCREMENT PRIMARY KEY,
         id_usuario INT NOT NULL,
         id_grupo INT NOT NULL,
